@@ -44,7 +44,7 @@ ISR_DIRECT_DECLARE(DMA1_Channel2_IRQHandler) {
     {
 		LL_DMA_ClearFlag_TC2(DMA1);
 		LL_DMA_DisableChannel(DMA1, UART3_DMA_TX_CHANNEL);
-		k_sem_give(&uart3dma.tx.txDone);
+    LL_USART_EnableIT_TC(USART3); // need wait for last byte transmit
     //LOG_ERR("DMA TC");
 	}
 	ISR_DIRECT_FOOTER(1);
@@ -62,6 +62,12 @@ ISR_DIRECT_DECLARE(UART3_IRQHandler) {
 
     uart3dma.rx.cb(&uart3dma.rx.buffer[0], sizeof(uart3dma.rx.buffer) - LL_DMA_GetDataLength(UART3_DMA_RX, UART3_DMA_RX_CHANNEL));
 	}
+	/* Check for TC interrupt */
+  if (LL_USART_IsEnabledIT_TC(USART3) && LL_USART_IsActiveFlag_TC(USART3)) {
+		LL_USART_ClearFlag_TC(USART3);        /* Clear TC flag */
+    LL_USART_DisableIT_TC(USART3);
+		k_sem_give(&uart3dma.tx.txDone);
+  }
 	ISR_DIRECT_FOOTER(1);
 	ISR_DIRECT_PM(); // power management
 	return 1; // We should check if scheduling decision should be made
@@ -177,8 +183,8 @@ static int uart3_dma_initilize(struct device *dev) {
   LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_2, 0);
   // enable transfer complete interrupt
   LL_DMA_EnableIT_TC(DMA1, LL_DMA_CHANNEL_2);
-   IRQ_DIRECT_CONNECT(DMA1_Channel2_IRQn, UART3_INTR_PRIO, DMA1_Channel2_IRQHandler, 0);
-   irq_enable(DMA1_Channel2_IRQn);
+  IRQ_DIRECT_CONNECT(DMA1_Channel2_IRQn, UART3_INTR_PRIO, DMA1_Channel2_IRQHandler, 0);
+  irq_enable(DMA1_Channel2_IRQn);
   
   LL_USART_InitTypeDef USART_InitStruct = {0};
   USART_InitStruct.BaudRate = 115200;
@@ -196,8 +202,8 @@ static int uart3_dma_initilize(struct device *dev) {
 	irq_enable(USART3_IRQn);
 
 
-   LOG_INF("UART3 DMA initialised");
-   return uart3_dma_error_success;
+  LOG_INF("UART3 DMA initialised");
+  return uart3_dma_error_success;
 }
 
 DEVICE_AND_API_INIT(uart3dma,UART3_DMA_NAME,&uart3_dma_initilize,NULL, NULL,POST_KERNEL,CONFIG_KERNEL_INIT_PRIORITY_DEVICE,&uart3dmaAPI);
