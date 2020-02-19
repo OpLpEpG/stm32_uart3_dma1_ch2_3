@@ -16,6 +16,8 @@
 #https://babblesim.github.io/folder_structure_and_env.html")
 #endif()
 
+if(CONFIG_UART3_DMA)
+
   message("UMDOM: modul UART3_DMA Запуск сборки.")
 
   zephyr_include_directories(
@@ -35,3 +37,5 @@
   file(GLOB_RECURSE UART2_DMA_SRCS . src/*.c)
 
   zephyr_library_sources(${UART2_DMA_SRCS} ${stm32_hal_sources})
+
+endif()

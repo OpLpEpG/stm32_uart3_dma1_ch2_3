@@ -1,1 +1,7 @@
 comment "UART3 DMA"
+
+config UART3_DMA
+	bool "enable uart with DMA zephyr modul" 
+	default  y
+	help
+	    enable uart with DMA zephyr modul
