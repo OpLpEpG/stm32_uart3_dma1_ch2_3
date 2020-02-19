@@ -1,7 +1,8 @@
 comment "UART3 DMA"
 
 config UART3_DMA
-	bool "enable uart with DMA zephyr modul" 
+	bool "enable UART3 with DMA channels 2,3 zephyr modul" 
 	default  y
 	help
 	    enable UART3 with DMA channels 2,3 zephyr modul
+		для модуля modbus
