@@ -4,4 +4,4 @@ config UART3_DMA
 	bool "enable uart with DMA zephyr modul" 
 	default  y
 	help
-	    enable uart with DMA zephyr modul
+	    enable UART3 with DMA channels 2,3 zephyr modul
