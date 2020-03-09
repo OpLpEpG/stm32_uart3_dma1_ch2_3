@@ -1,7 +1,7 @@
 
-if(CONFIG_UART3_DMA)
+if(CONFIG_UART3_DMA || CONFIG_UART2_DMA)
 
-  message("UMDOM: modul UART3_DMA Запуск сборки.")
+  message("UMDOM: modul UART2_3_DMA Запуск сборки.")
 
   zephyr_include_directories(
     src/
@@ -13,8 +13,15 @@ if(CONFIG_UART3_DMA)
   include(../stm32f1xx_ll.cmake)
   add_stm32_ll(usart gpio rcc)
 
-  file(GLOB_RECURSE UART2_DMA_SRCS . src/*.c)
+  #  file(GLOB_RECURSE UART3_DMA_SRCS . src/*.c)
+  #zephyr_library_sources(${UART3_DMA_SRCS})
+  
+  if(CONFIG_UART3_DMA)
+  zephyr_library_sources(src/usart3_dma1_ch2_3.c)
+  endif()
 
-  zephyr_library_sources(${UART2_DMA_SRCS})
+  if(CONFIG_UART3_DMA)
+  zephyr_library_sources(src/usart2_dma1_ch6_7.c)
+  endif()
 
 endif()
