@@ -1,5 +1,5 @@
 
-if(CONFIG_UART3_DMA || CONFIG_UART2_DMA)
+if(CONFIG_UART3_DMA OR CONFIG_UART2_DMA)
 
   message("UMDOM: modul UART2_3_DMA Запуск сборки.")
 

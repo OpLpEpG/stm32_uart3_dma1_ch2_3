@@ -104,7 +104,7 @@ static uart3_dma_error_t uart3_dma_writeBuffer(u8_t * pB, size_t len, u32_t time
 	LL_DMA_SetMemoryAddress(UART3_DMA_TX, UART3_DMA_TX_CHANNEL, (uint32_t)pB);
 	LL_DMA_SetDataLength(UART3_DMA_TX, UART3_DMA_TX_CHANNEL, len);
 	LL_DMA_EnableChannel(UART3_DMA_TX, UART3_DMA_TX_CHANNEL);
-	if (k_sem_take(&uart3dma.tx.txDone, timeout)) {
+	if (k_sem_take(&uart3dma.tx.txDone, Z_TIMEOUT_MS(timeout))) {
 		r = uart3_dma_error_timeout;
 	}
 	k_mutex_unlock(&uart3dma.tx.guardM);
