@@ -103,7 +103,7 @@ static uart_dma_error_t uart2_dma_writeBuffer(u8_t * pB, size_t len, u32_t timeo
 	LL_DMA_SetMemoryAddress(UART2_DMA_TX, UART2_DMA_TX_CHANNEL, (uint32_t)pB);
 	LL_DMA_SetDataLength(UART2_DMA_TX, UART2_DMA_TX_CHANNEL, len);
 	LL_DMA_EnableChannel(UART2_DMA_TX, UART2_DMA_TX_CHANNEL);
-	if (k_sem_take(&uart2dma.tx.txDone, Z_TIMEOUT_MS(timeout))) {
+	if (k_sem_take(&uart2dma.tx.txDone, K_MSEC(timeout))) {
 		r = uart_dma_error_timeout;
 	}
 	k_mutex_unlock(&uart2dma.tx.guardM);
