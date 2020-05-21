@@ -72,7 +72,7 @@ ISR_DIRECT_DECLARE(UART2_IRQHandler) {
 	return 1; // We should check if scheduling decision should be made
 }
 
-static uart_dma_error_t uart2_dma_init (bool start, uart2_dma_fkt_rx_t rxcb)
+static uart_dma_error_t uart2_dma_init (bool start, uart_dma_fkt_rx_t rxcb)
 {
 	if (true == start) {
 		LOG_DBG("UART2 DMA on");
